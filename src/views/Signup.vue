@@ -85,14 +85,12 @@ export default {
   },
   methods: {
     signup: function() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
         .then(
-          user => {
+          (user) => {
             this.$router.replace("home");
           },
-          err => {
+          (err) => {
             alert(err.message);
           }
         );

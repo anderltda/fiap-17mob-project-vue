@@ -14,13 +14,21 @@ const router = new Router({
             redirect: 'login'
         },
         {
-            path: '*/',
+            path: '/',
             redirect: 'login'
         },
         {
             path: '/home',
             name: 'Home',
-            component: Home
+            component: Home,
+            beforeEnter: (to, from, next) => {
+                const currentUser = firebase.auth().currentUser;
+                if (!currentUser) {
+                    next('error');
+                } else {
+                    next();
+                }
+            }
         },
         {
             path: '/login',
@@ -33,40 +41,33 @@ const router = new Router({
             component: Signup
         },
         {
-            path: '/about',
-            name: 'About',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
+            path: '/error',
+            name: 'Error',
             component: () =>
-                import ( /* webpackChunkName: "about" */ './views/About.vue')
+                import ( /* webpackChunkName: "about" */ './views/Error.vue')
         }
     ]
 });
 
-router.beforeEach((to, from, next) => {
+router.afterEach((to, from) => {
 
     var nav = document.getElementById("nav");
 
     const currentUser = firebase.auth().currentUser;
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
-    //console.log(currentUser);
-    //console.log(requiresAuth);
 
     if (currentUser) {
-        //   next({ path: '/home' })
-        nav.style.display = "block";
+
+        if (nav) {
+            nav.style.display = "block";
+        }
+
     } else {
 
-        //nav.style.display = "none";
-        // next({ path: '/login' })
-    }
+        if (nav) {
+            nav.style.display = "none";
+        }
 
-    //if (requiresAuth && !currentUser) next('login');
-    //else if (!requiresAuth && currentUser) next('home');
-    //else next();
-    next();
+    }
 });
 
 export default router;
