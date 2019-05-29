@@ -19,6 +19,8 @@ firebase.initializeApp({
     appId: "1:662383105600:web:83cd95e840b796ff"
 });
 
+export const db = firebase.firestore();
+
 Vue.use(BootstrapVue);
 
 firebase.auth().onAuthStateChanged(() => {

@@ -13,16 +13,6 @@
                   <b-input-group class="mb-4">
                     <b-input-group-prepend></b-input-group-prepend>
                     <b-form-input
-                      v-model="fullname"
-                      type="text"
-                      class="form-control"
-                      placeholder="Full Name"
-                      autocomplete="name"
-                    />
-                  </b-input-group>
-                  <b-input-group class="mb-4">
-                    <b-input-group-prepend></b-input-group-prepend>
-                    <b-form-input
                       v-model="email"
                       type="email"
                       class="form-control"
@@ -43,21 +33,16 @@
                   <b-input-group class="mb-4">
                     <b-input-group-prepend></b-input-group-prepend>
                     <b-form-input
-                      v-model="phone"
-                      type="tel"
+                      v-model="confirm"
+                      type="password"
                       class="form-control"
-                      placeholder="Phone"
-                      autocomplete="current-phone"
+                      placeholder="Confirm Password"
+                      autocomplete="current-password"
                     />
-                  </b-input-group>
+                  </b-input-group>                  
                   <b-row>
                     <b-col cols="12">
                       <b-button @click="signup" variant="primary" class="px-5">Create</b-button>
-                    </b-col>
-                    <b-col cols="12">
-                      <b-button variant="primary" class="active mt-3">
-                        <router-link to="/login">Back</router-link>
-                      </b-button>
                     </b-col>
                   </b-row>
                 </b-form>
@@ -67,7 +52,9 @@
         </b-col>
       </b-row>
     </div>
+    
   </div>
+  
 </template>
 
 <script>
@@ -77,23 +64,24 @@ export default {
   name: "Signup",
   data() {
     return {
-      fullname: '',
-      phone: '',
       email: '',
-      password: ''
+      password: '',
+      confirm: '',
     };
   },
   methods: {
     signup: function() {
-      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-        .then(
-          (user) => {
-            this.$router.replace("home");
-          },
-          (err) => {
-            alert(err.message);
-          }
-        );
+      if(this.password == this.confirm) {
+        firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+          .then(() => {
+              this.$router.replace("home");
+            }, (err) => {
+              alert(err.message);
+            }
+          );
+      } else {
+        alert("Confirmar password não é igual a password!");
+      }
     }
   }
 };

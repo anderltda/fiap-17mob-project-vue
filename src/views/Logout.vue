@@ -8,12 +8,9 @@
             <h4 class="pt-3">Oops! You're lost.</h4>
             <p class="text-muted">The page you are looking for was not found.</p>
           </div>
-          <b-input-group>
-            <input id="prependedInput" class="form-control" size="16" type="text" placeholder="What are you looking for?">
-            <b-input-group-append>
-              <b-button variant="info">Search</b-button>
-            </b-input-group-append>
-          </b-input-group>
+        </b-col>
+        <b-col md="12">
+            <b-button @click="logout" variant="primary" class="px-5">Logout</b-button>
         </b-col>
       </b-row>
     </div>
@@ -21,7 +18,15 @@
 </template>
 
 <script>
+import firebase from "firebase";
 export default {
-  name: 'Page404'
+  name: 'logout',
+  methods: {
+    logout: function() {
+        firebase.auth().signOut().then(() => {
+          this.$router.replace('login');
+        })
+    }
+  }
 }
 </script>

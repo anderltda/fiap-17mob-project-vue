@@ -3,6 +3,9 @@ import firebase from "firebase";
 import Router from 'vue-router'
 
 import Home from '@/views/Home.vue'
+import Profile from '@/views/Profile.vue'
+import Address from '@/views/Address.vue'
+import Logout from '@/views/Logout.vue'
 import Login from '@/views/Login.vue'
 import Signup from '@/views/Signup.vue'
 
@@ -18,6 +21,16 @@ const router = new Router({
             redirect: 'login'
         },
         {
+            path: '/login',
+            name: 'Login',
+            component: Login
+        },
+        {
+            path: '/signup',
+            name: 'Signup',
+            component: Signup
+        },        
+        {
             path: '/home',
             name: 'Home',
             component: Home,
@@ -31,14 +44,43 @@ const router = new Router({
             }
         },
         {
-            path: '/login',
-            name: 'Login',
-            component: Login
+            path: '/profile',
+            name: 'Profile',
+            component: Profile,
+            beforeEnter: (to, from, next) => {
+                const currentUser = firebase.auth().currentUser;
+                if (!currentUser) {
+                    next('error');
+                } else {
+                    next();
+                }
+            }
         },
         {
-            path: '/signup',
-            name: 'Signup',
-            component: Signup
+            path: '/address',
+            name: 'Address',
+            component: Address,
+            beforeEnter: (to, from, next) => {
+                const currentUser = firebase.auth().currentUser;
+                if (!currentUser) {
+                    next('error');
+                } else {
+                    next();
+                }
+            }
+        },
+        {
+            path: '/logout',
+            name: 'Logout',
+            component: Logout,
+            beforeEnter: (to, from, next) => {
+                const currentUser = firebase.auth().currentUser;
+                if (!currentUser) {
+                    next('error');
+                } else {
+                    next();
+                }
+            }
         },
         {
             path: '/error',
@@ -49,7 +91,7 @@ const router = new Router({
     ]
 });
 
-router.afterEach((to, from) => {
+router.afterEach(() => {
 
     var nav = document.getElementById("nav");
 
